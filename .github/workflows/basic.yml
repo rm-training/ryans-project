@@ -41,7 +41,26 @@ jobs:
         run: echo Hello, world!
 
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - name: Generate build
+        run: touch build.md
+          
+      - name: Upload build
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build.md
+          
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: Production
+    
+    steps:
+      - name: Download file
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          
+      - name: Fake Deploy
+        run: echo I am deploying...
+    
